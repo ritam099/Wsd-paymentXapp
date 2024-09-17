@@ -18,7 +18,7 @@ The Payment App is a full-stack web application which demonstrate streamline use
 
 ### Backend
 
-1. Clone the repository: `git clone https://github.com/tsahil01/Paytm-Clone`
+1. Clone the repository: `git clone https://github.com/ritam099/Wsd-paymentXapp.git`
 2. Navigate to the backend directory: `cd backend`
 3. Install dependencies: `npm install`
 4. Create a `.env` file with MongoDB connection details and JWT secret.
