@@ -1,11 +1,10 @@
-const express = require('express')
-const zod = require('zod')
-const {User} = require('../db')
-const {Account} = require('../db')
-const jwt = require('jsonwebtoken')
-const authMiddlewar = require('../middleware')
+import express from 'express';
+import zod from 'zod';
+import { User, Account } from '../db.js';
+import jwt from 'jsonwebtoken';
+import authMiddlewar from '../middleware.js';
 
-require('dotenv').config()
+import 'dotenv/config';
 const JWT_SECRET = process.env.JSON_WEB_TOKEN_SECRET
 
 const UserRoute = express.Router();
@@ -48,18 +47,21 @@ UserRoute.post("/signup", async (req, res)=>{
             lastname: req.body.lastname,
         })
         const username = newUser.username
+        const id = newUser._id
+        console.log(id)
         const token = jwt.sign({
+            id: id,
             username: username
         }, JWT_SECRET)
         
         const userId = newUser._id
         const newAccount = await Account.create({
             userId,
-            balance: (1 + Math.random() * 10000)
+            balance: (1 + Math.random() * 10000000)
         })
         res.status(200).json({
             msg: "New User created",
-            token:token,
+            token: token,
             balance: newAccount.balance
         })
     } catch(err){
@@ -90,7 +92,11 @@ UserRoute.post("/signin", async (req,res)=>{
     })
     if(FindUser != null){
         const username = FindUser.username
-        const token = jwt.sign({username: username}, JWT_SECRET)
+        const id = FindUser._id
+        const token = jwt.sign({
+            id: id,
+            username: username
+        }, JWT_SECRET)
         res.json({
             msg: "Succesfully logged in",
             token: token
@@ -162,4 +168,4 @@ UserRoute.get('/bulk', authMiddlewar, async (req, res)=>{
     }
     
 })
-module.exports = UserRoute
+export default  UserRoute
