@@ -49,3 +49,9 @@ The Payment App is a full-stack web application which demonstrate streamline use
 3. **Dashboard**: Access the user dashboard to view account details, including the current balance.
 
 4. **Send Money**: Use the "Send Money" page to initiate secure money transfers to other users.
+
+5. **View Transactions**: Users can view their transactions and filter the credit and debit
+ transactions.
+
+**Ouputs**
+![image](https://github.com/user-attachments/assets/9b85bb24-021e-4c23-b4cc-1e8c788049f8)
