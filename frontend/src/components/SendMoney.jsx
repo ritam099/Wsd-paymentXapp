@@ -5,7 +5,6 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import '../index.css';
 
-// Card component
 const Card = ({ title, content, buttonLabel, onClose }) => (
     <div className="bg-custom-purple text-custom-white rounded-lg p-7 flex flex-col gap-5 max-w-md w-full card-enter">
         <h2 className="text-2xl font-bold">{title}</h2>
@@ -25,7 +24,7 @@ export default function SendMoney() {
     const [amount, setAmount] = useState(0);
     const [showCard, setShowCard] = useState(false);
     const [cardMessage, setCardMessage] = useState("");
-    const [loading, setLoading] = useState(false); // Loading state
+    const [loading, setLoading] = useState(false);
 
     const fetchSendMoney = async () => {
         if (amount <= 0) {
@@ -49,18 +48,17 @@ export default function SendMoney() {
                 })
             });
 
-            // Log the response for debugging
             console.log('Response Status:', response.status);
             const data = await response.json();
-            console.log('Response Data:', data); // Log the data
+            console.log('Response Data:', data);
 
-            alert("Transaction complete");
             if (!response.ok) {
                 throw new Error(data.msg || "Something went wrong");
             }
-
+            alert("Transaction Successful")
+    
             setCardMessage(data.msg);
-            navigate("/dashboard",{replace: true})
+            navigate("/dashboard", { replace: true });
         } catch (error) {
             setCardMessage(error.message || "An error occurred. Please try again.");
         } finally {
@@ -71,7 +69,7 @@ export default function SendMoney() {
 
     const handleAmountChange = (e) => {
         const value = parseFloat(e.target.value);
-        setAmount(isNaN(value) ? 0 : value); // Set to 0 if the input is not a valid number
+        setAmount(isNaN(value) ? 0 : value);
     };
 
     const handleCloseCard = () => {
@@ -103,7 +101,7 @@ export default function SendMoney() {
                 </div>
             </div>
             {showCard && (
-                <div className={`fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center card-enter`}>
+                <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
                     <Card
                         title="Transaction Status"
                         content={cardMessage}
