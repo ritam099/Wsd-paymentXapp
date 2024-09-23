@@ -38,7 +38,12 @@ export default function Dashboard() {
 
   const handleLogout = () => {
     localStorage.clear();
-    navigate("/sign-in");
+    
+    navigate("/sign-in",{replace:true});
+    window.history.pushState(null, null, window.location.href);
+    window.onpopstate = () => {
+      window.history.go(1);
+    };
   };
 
   return (

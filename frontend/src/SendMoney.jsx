@@ -51,12 +51,18 @@ export default function SendMoney(){
         }, 500)
     }
 
+    const logo = () => {
+        navigate('/dashboard')
+    }
+
     return (
         <div className="min-h-screen bg-custom-black text-white">
             {/* Navigation */}
             <nav className="flex justify-between p-5 lg:px-10 bg-custom-purple text-custom-teal drop-shadow-2xl">
                 <div className="font-black text-2xl my-auto">
+                 <button onClick={logo}>
                     <span className="text-custom-yellow">Pay4U</span> 
+                 </button>
                 </div>
                 <div className="flex gap-3">
                     <div className="text-xl font-bold m-auto hidden md:block">Hello,</div>
