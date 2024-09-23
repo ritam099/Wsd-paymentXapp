@@ -3,7 +3,7 @@ import { transfererUser } from "../sources/atoms/sendUserAtom";
 import { baseBackendUrl } from "../../shared/urls";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import '../index.css'
+import '../index.css';
 
 // Card component
 const Card = ({ title, content, buttonLabel, onClose }) => (
@@ -28,8 +28,8 @@ export default function SendMoney() {
     const [loading, setLoading] = useState(false); // Loading state
 
     const fetchSendMoney = async () => {
-        if (amount == 0) {
-            setCardMessage("Amount can't be empty");
+        if (amount <= 0) {
+            setCardMessage("Amount must be greater than zero");
             setShowCard(true);
             return;
         }
@@ -49,14 +49,29 @@ export default function SendMoney() {
                 })
             });
 
+            // Log the response for debugging
+            console.log('Response Status:', response.status);
             const data = await response.json();
+            console.log('Response Data:', data); // Log the data
+
+            alert("Transaction complete");
+            if (!response.ok) {
+                throw new Error(data.msg || "Something went wrong");
+            }
+
             setCardMessage(data.msg);
+            navigate("/dashboard",{replace: true})
         } catch (error) {
-            setCardMessage("An error occurred. Please try again.");
+            setCardMessage(error.message || "An error occurred. Please try again.");
         } finally {
             setShowCard(true);
             setLoading(false); 
         }
+    };
+
+    const handleAmountChange = (e) => {
+        const value = parseFloat(e.target.value);
+        setAmount(isNaN(value) ? 0 : value); // Set to 0 if the input is not a valid number
     };
 
     const handleCloseCard = () => {
@@ -75,7 +90,7 @@ export default function SendMoney() {
                             type="text" 
                             className="input-animation w-full rounded-lg bg-custom-white text-custom-teal p-2 mt-2 outline-none" 
                             placeholder="Enter amount"
-                            onChange={(e) => setAmount(e.target.value)}
+                            onChange={handleAmountChange}
                         />
                     </div>
                     <button 
