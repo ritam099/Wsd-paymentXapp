@@ -33,11 +33,20 @@ export default function App(){
 }
 
 
-function Redirect(){
+function Redirect() {
   const navigate = useNavigate();
-  useEffect(()=>{
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
     const isAuth = localStorage.length > 0;
-    isAuth ? navigate('/dashboard') : navigate('/sign-in')
-  },[navigate])
-  return null
+
+    const timer = setTimeout(() => {
+      setLoading(false);
+      isAuth ? navigate('/dashboard') : navigate('/sign-in');
+    }, 2000); 
+
+    return () => clearTimeout(timer);
+  }, [navigate]);
+
+  return loading ? <Loader /> : null; 
 }

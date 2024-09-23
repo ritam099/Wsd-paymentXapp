@@ -1,17 +1,17 @@
-import { useEffect, useState } from "react"
-import { useRecoilValue, useSetRecoilState } from "recoil"
-import { usersAtom } from "./sources/atoms/usersAtom"
-import { transfererUser } from "./sources/atoms/sendUserAtom"
-import { useNavigate } from "react-router-dom"
-import { jwtDecode } from "jwt-decode"
-
-export default function SendMoney(){
+import { useEffect, useState } from "react";
+import { useRecoilValue, useSetRecoilState } from "recoil";
+import { usersAtom } from "./sources/atoms/usersAtom";
+import { transfererUser } from "./sources/atoms/sendUserAtom";
+import { useNavigate } from "react-router-dom";
+import { jwtDecode } from "jwt-decode";
+import './style.css'
+export default function SendMoney() {
     let timeout;
-    const navigate = useNavigate()
-    const users = useRecoilValue(usersAtom)
-    const setTransfererUserId = useSetRecoilState(transfererUser)
+    const navigate = useNavigate();
+    const users = useRecoilValue(usersAtom);
+    const setTransfererUserId = useSetRecoilState(transfererUser);
 
-    const [inputValue, setInputValue] = useState("")
+    const [inputValue, setInputValue] = useState("");
     const [filteredUsers, setFilteredUsers] = useState([]);
     const [currentUserId, setCurrentUserId] = useState(null);
 
@@ -21,7 +21,6 @@ export default function SendMoney(){
             try {
                 const decodedToken = jwtDecode(token);
                 setCurrentUserId(decodedToken.id);
-                console.log(decodedToken)
             } catch (error) {
                 console.error('Error decoding token:', error);
             }
@@ -29,12 +28,10 @@ export default function SendMoney(){
     }, []);
 
     useEffect(() => {
-        // Initialize filteredUsers with users when the component mounts
         setFilteredUsers(users || []);
     }, [users]);
 
     useEffect(() => {
-        // Filter users based on inputValue when it changes and exclude current user
         if (users && Array.isArray(users)) {
             const filtered = users.filter((user) =>
                 user.firstname.toLowerCase().includes(inputValue.toLowerCase()) &&
@@ -44,25 +41,25 @@ export default function SendMoney(){
         }
     }, [inputValue, users, currentUserId]);
 
-    function debounce(value){
-        clearTimeout(timeout)
-        timeout = setTimeout(()=>{
-            setInputValue(value.toLowerCase())
-        }, 500)
+    function debounce(value) {
+        clearTimeout(timeout);
+        timeout = setTimeout(() => {
+            setInputValue(value.toLowerCase());
+        }, 500);
     }
 
     const logo = () => {
-        navigate('/dashboard')
-    }
+        navigate('/dashboard');
+    };
 
     return (
         <div className="min-h-screen bg-custom-black text-white">
             {/* Navigation */}
             <nav className="flex justify-between p-5 lg:px-10 bg-custom-purple text-custom-teal drop-shadow-2xl">
                 <div className="font-black text-2xl my-auto">
-                 <button onClick={logo}>
-                    <span className="text-custom-yellow">Pay4U</span> 
-                 </button>
+                    <button onClick={logo}>
+                        <span className="text-custom-yellow">Pay4U</span>
+                    </button>
                 </div>
                 <div className="flex gap-3">
                     <div className="text-xl font-bold m-auto hidden md:block">Hello,</div>
@@ -90,23 +87,30 @@ export default function SendMoney(){
             <main className="lg:px-10">
                 <div className="flex flex-col p-7 gap-2">
                     <div className="font-black text-xl w-full">Users:</div>
-                    <input type="text" className="md:w-1/3 rounded-lg bg-slate-950 p-3 mt-2 outline-none" placeholder="Search User" onChange={(e) =>
-                        debounce(e.target.value)}/>
-                    {filteredUsers && filteredUsers.map((user)=>{
+                    <input
+                        type="text"
+                        className="md:w-1/3 rounded-lg bg-slate-950 p-3 mt-2 outline-none input-animation"
+                        placeholder="Search User"
+                        onChange={(e) => debounce(e.target.value)}
+                    />
+                    {filteredUsers && filteredUsers.map((user) => {
                         return (
-                        <div className="flex justify-between mt-2" key={user._id}>
-                            <div className="font-bold my-auto">{user.firstname} {user.lastname}</div>
-                            <button className="bg-custom-yellow hover:bg-custom-indigo text-custom-black py-2 px-4 rounded-lg font-bold"
-                            onClick={()=>{
-                                setTransfererUserId([user._id, `${user.firstname} ${user.lastname}`])
-                                navigate('/sendMoney')
-                                
-                            }}>Send Money</button>
-                        </div>
-                        )
+                            <div className="flex justify-between mt-2 user-animation" key={user._id}>
+                                <div className="font-bold my-auto">{user.firstname} {user.lastname}</div>
+                                <button
+                                    className="bg-custom-yellow hover:bg-custom-indigo text-custom-black py-2 px-4 rounded-lg font-bold button-animation"
+                                    onClick={() => {
+                                        setTransfererUserId([user._id, `${user.firstname} ${user.lastname}`]);
+                                        navigate('/sendMoney');
+                                    }}
+                                >
+                                    Send Money
+                                </button>
+                            </div>
+                        );
                     })}
                 </div>
             </main>
         </div>
-    )
+    );
 }
